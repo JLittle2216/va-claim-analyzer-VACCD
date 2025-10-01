@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VA CLAIM? CAN DO!</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .app-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .progress-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #e9ecef;
+            z-index: 1;
+        }
+        .progress-step {
+            text-align: center;
+            z-index: 2;
+            background: white;
+            padding: 0 10px;
+        }
+        .step-number {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e9ecef;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: bold;
+            border: 3px solid #e9ecef;
+        }
+        .step-active .step-number {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .step-completed .step-number {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        .step-text {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        .step-active .step-text {
+            color: #007bff;
+            font-weight: bold;
+        }
+        .section {
+            display: none;
+            padding: 30px;
+            min-height: 400px;
+        }
+        .section-active {
+            display: block;
+        }
+        .section h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #495057;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+        .condition-block {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+        }
+        .condition-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .remove-condition {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .contingency-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .badge-1 { background: #dc3545; color: white; }
+        .badge-2 { background: #fd7e14; color: white; }
+        .badge-3 { background: #ffc107; color: black; }
+        .badge-4 { background: #20c997; color: white; }
+        .analysis-result {
+            background: #e7f3ff;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .contingency-description {
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        .remedy-action {
+            background: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .legal-citation {
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+        }
+        .file-upload {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .file-upload.dragover {
+            border-color: #007bff;
+            background: #f0f8ff;
+        }
+        .upload-icon {
+            font-size: 48px;
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .section {
+                padding: 20px;
+            }
+            .progress-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .progress-bar::before {
+                display: none;
+            }
+            .progress-step {
+                margin-bottom: 15px;
+                text-align: left;
+                display: flex;
+                align-items: center;
+            }
+            .step-number {
+                margin: 0 15px 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>VA CLAIM? CAN DO!</h1>
+            <div class="subtitle">Your Strategic Path to VA Benefits</div>
+        </div>
+        
+        <div class="app-container">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-step step-active" id="step-1">
+                        <div class="step-number">1</div>
+                        <div class="step-text">Veteran Info</div>
+                    </div>
+                    <div class="progress-step" id="step-2">
+                        <div class="step-number">2</div>
+                        <div class="step-text">Conditions</div>
+                    </div>
+                    <div class="progress-step" id="step-3">
+                        <div class="step-number">3</div>
+                        <div class="step-text">Documents</div>
+                    </div>
+                    <div class="progress-step" id="step-4">
+                        <div class="step-number">4</div>
+                        <div class="step-text">Analysis</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 1: Veteran Information -->
+            <div id="section-1" class="section section-active">
+                <h2>Veteran Information</h2>
+                <div class="form-group">
+                    <label for="veteran-name">Full Name</label>
+                    <input type="text" id="veteran-name" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="va-file-number">VA File Number</label>
+                    <input type="text" id="va-file-number" placeholder="Your VA file number">
+                </div>
+                <div class="form-group">
+                    <label for="service-branch">Service Branch</label>
+                    <select id="service-branch">
+                        <option value="">Select your service branch</option>
+                        <option value="army">Army</option>
+                        <option value="navy">Navy</option>
+                        <option value="air-force">Air Force</option>
+                        <option value="marines">Marines</option>
+                        <option value="coast-guard">Coast Guard</option>
+                        <option value="space-force">Space Force</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="discharge-type">Character of Discharge</label>
+                    <select id="discharge-type">
+                        <option value="">Select discharge type</option>
+                        <option value="honorable">Honorable</option>
+                        <option value="general">General</option>
+                        <option value="other-than-honorable">Other Than Honorable</option>
+                        <option value="bad-conduct">Bad Conduct</option>
+                        <option value="dishonorable">Dishonorable</option>
+                    </select>
+                </div>
+                <div class="navigation">
+                    <div></div>
+                    <button class="btn" onclick="nextSection(2)">Next: Conditions</button>
+                </div>
+            </div>
+
+            <!-- Section 2: Conditions -->
+            <div id="section-2" class="section">
+                <h2>Your Claimed Conditions</h2>
+                <div id="conditions-container">
+                    <!-- Conditions will be added here dynamically -->
+                </div>
+                <button class="btn btn-secondary" onclick="addCondition()">+ Add Another Condition</button>
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="previousSection(1)">Back</button>
+                    <button class="btn" onclick="nextSection(3)">Next: Documents</button>
+                </div>
+            </div>
+
+            <!-- Section 3: Documents -->
+            <div id="section-3" class="section">
+                <h2>Upload Your Documents</h2>
+                <div class="file-upload" id="drop-zone">
+                    <div class="upload-icon">📁</div>
+                    <p>Drag and drop your files here or click to browse</p>
+                    <input type="file" id="file-input" multiple style="display: none;">
+                    <button class="btn" onclick="document.getElementById('file-input').click()">Browse Files</button>
+                </div>
+                <div id="file-list"></div>
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="previousSection(2)">Back</button>
+                    <button class="btn btn-success" onclick="analyzeClaim()">Analyze My Claim</button>
+                </div>
+            </div>
+
+            <!-- Section 4: Analysis Results -->
+            <div id="section-4" class="section">
+                <h2>Your Claims Analysis Report</h2>
+                <div id="analysis-results">
+                    <!-- Analysis will be generated here -->
+                </div>
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="previousSection(3)">Back</button>
+                    <button class="btn" onclick="generatePDF()">Download PDF Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application State
+        const claimData = {
+            veteran: {},
+            conditions: [],
+            documents: []
+        };
+
+        // Progress Management
+        function updateProgress(currentStep) {
+            document.querySelectorAll('.progress-step').forEach((step, index) => {
+                step.classList.remove('step-active', 'step-completed');
+                if (index + 1 < currentStep) {
+                    step.classList.add('step-completed');
+                } else if (index + 1 === currentStep) {
+                    step.classList.add('step-active');
+                }
+            });
+        }
+
+        function nextSection(sectionNum) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('section-active');
+            });
+            document.getElementById(`section-${sectionNum}`).classList.add('section-active');
+            updateProgress(sectionNum);
+        }
+
+        function previousSection(sectionNum) {
+            nextSection(sectionNum);
+        }
+
+        // Condition Management
+        function addCondition() {
+            const container = document.getElementById('conditions-container');
+            const conditionId = Date.now();
+            
+            const conditionHTML = `
+                <div class="condition-block" id="condition-${conditionId}">
+                    <div class="condition-header">
+                        <h3>Condition #${container.children.length + 1}</h3>
+                        <button class="remove-condition" onclick="removeCondition(${conditionId})">Remove</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Condition Name</label>
+                        <input type="text" class="condition-name" placeholder="e.g., PTSD, Back Pain, Tinnitus">
+                    </div>
+                    <div class="form-group">
+                        <label>Current Status</label>
+                        <select class="condition-status" onchange="updateContingencyBadge(this)">
+                            <option value="">Select status</option>
+                            <option value="denied">Not Service Connected</option>
+                            <option value="connected">Service Connected</option>
+                            <option value="development">In Development</option>
+                            <option value="increase">Service Connected - Seeking Increase</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Contingency Type</label>
+                        <select class="contingency-type">
+                            <option value="">Select contingency</option>
+                            <option value="1">1 - Not Service Connected</option>
+                            <option value="2">2 - Disagree with Exam</option>
+                            <option value="3">3 - Underrated</option>
+                            <option value="4">4 - Wrong Effective Date</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>VA's Stated Reason</label>
+                        <textarea class="va-reason" placeholder="What did VA say in your decision letter?"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Evidence Description</label>
+                        <textarea class="evidence-desc" placeholder="Describe the evidence you have for this condition"></textarea>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', conditionHTML);
+        }
+
+        function removeCondition(conditionId) {
+            const element = document.getElementById(`condition-${conditionId}`);
+            if (element) {
+                element.remove();
+                // Renumber remaining conditions
+                const containers = document.querySelectorAll('.condition-block');
+                containers.forEach((container, index) => {
+                    const header = container.querySelector('h3');
+                    if (header) {
+                        header.textContent = `Condition #${index + 1}`;
+                    }
+                });
+            }
+        }
+
+        function updateContingencyBadge(selectElement) {
+            const status = selectElement.value;
+            const contingencySelect = selectElement.closest('.condition-block').querySelector('.contingency-type');
+            
+            // Auto-set contingency based on status
+            if (status === 'denied') {
+                contingencySelect.value = '1';
+            } else if (status === 'increase') {
+                contingencySelect.value = '3';
+            }
+        }
+
+        // File Upload Handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('file-input');
+            
+            dropZone.addEventListener('click', () => fileInput.click());
+            
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+            
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+            
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+        });
+
+        function handleFiles(files) {
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = '<h3>Uploaded Files:</h3>';
+            
+            Array.from(files).forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'form-group';
+                fileItem.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+                        <span style="color: green;">✓ Uploaded</span>
+                    </div>
+                `;
+                fileList.appendChild(fileItem);
+                
+                claimData.documents.push({
+                    name: file.name,
+                    size: file.size,
+                    type: file.type
+                });
+            });
+        }
+
+        // Analysis Engine
+        function analyzeClaim() {
+            // Collect data
+            claimData.veteran = {
+                name: document.getElementById('veteran-name').value,
+                fileNumber: document.getElementById('va-file-number').value,
+                serviceBranch: document.getElementById('service-branch').value,
+                dischargeType: document.getElementById('discharge-type').value
+            };
+            
+            claimData.conditions = [];
+            document.querySelectorAll('.condition-block').forEach(block => {
+                claimData.conditions.push({
+                    name: block.querySelector('.condition-name').value,
+                    status: block.querySelector('.condition-status').value,
+                    contingency: block.querySelector('.contingency-type').value,
+                    vaReason: block.querySelector('.va-reason').value,
+                    evidence: block.querySelector('.evidence-desc').value
+                });
+            });
+            
+            // Generate analysis
+            const analysis = generateComprehensiveAnalysis();
+            document.getElementById('analysis-results').innerHTML = analysis;
+            nextSection(4);
+        }
+
+        function generateComprehensiveAnalysis() {
+            let html = `
+                <div class="analysis-result">
+                    <h3>Executive Summary</h3>
+                    <p>Based on your submitted information, here's your strategic path forward:</p>
+                    <ul>
+                        <li><strong>Total Conditions Analyzed:</strong> ${claimData.conditions.length}</li>
+                        <li><strong>Priority Actions:</strong> ${getPriorityActions(claimData.conditions)}</li>
+                        <li><strong>Estimated Timeline:</strong> 30-90 days for initial actions</li>
+                    </ul>
+                </div>
+            `;
+            
+            claimData.conditions.forEach((condition, index) => {
+                const contingencyInfo = getContingencyAnalysis(condition.contingency, condition);
+                html += `
+                    <div class="analysis-result">
+                        <h3>${condition.name}</h3>
+                        <div class="contingency-description">
+                            Contingency ${condition.contingency}: ${contingencyInfo.description}
+                        </div>
+                        <p><strong>VA's Position:</strong> ${condition.vaReason || 'Not specified'}</p>
+                        <p><strong>Your Evidence:</strong> ${condition.evidence || 'Not described'}</p>
+                        <div class="remedy-action">
+                            <strong>Recommended Action:</strong> ${contingencyInfo.remedy}
+                        </div>
+                        <p><strong>Legal Basis:</strong> <span class="legal-citation">${contingencyInfo.legalBasis}</span></p>
+                        <p><strong>Required Forms:</strong> ${contingencyInfo.forms.join(', ')}</p>
+                    </div>
+                `;
+            });
+            
+            html += `
+                <div class="analysis-result">
+                    <h3>Next Steps</h3>
+                    <ol>
+                        <li>Review each condition analysis above</li>
+                        <li>Gather the recommended evidence</li>
+                        <li>Complete the required VA forms</li>
+                        <li>Submit your claim package</li>
+                        <li>Follow up within 60 days</li>
+                    </ol>
+                    <p><em>Note: This analysis is based on the information provided and should be reviewed by a qualified VSO or attorney.</em></p>
+                </div>
+            `;
+            
+            return html;
+        }
+
+        function getContingencyAnalysis(contingency, condition) {
+            const analysisMap = {
+                '1': {
+                    description: 'Not Service Connected - Missing element to grant',
+                    remedy: 'File Supplemental Claim with new evidence addressing the missing element',
+                    legalBasis: '38 CFR § 3.303, Duty to Assist violations',
+                    forms: ['VA Form 20-0995']
+                },
+                '2': {
+                    description: 'Service Connected - Disagree with Examination',
+                    remedy: 'Request new examination citing inadequate previous exam rationale',
+                    legalBasis: 'Nieves-Rodriguez v. Peake - inadequate examination standards',
+                    forms: ['VA Form 21-4138']
+                },
+                '3': {
+                    description: 'Service Connected - Underrated',
+                    remedy: 'File for Increase with evidence supporting higher rating criteria',
+                    legalBasis: '38 CFR Part 4, 38 CFR § 4.7 - benefit of doubt',
+                    forms: ['VA Form 21-526EZ']
+                },
+                '4': {
+                    description: 'Service Connected - Wrong Effective Date',
+                    remedy: 'File Higher-Level Review or CUE motion for correct effective date',
+                    legalBasis: '38 CFR § 3.155, § 3.400 - effective date regulations',
+                    forms: ['VA Form 20-0996']
+                }
+            };
+            
+            return analysisMap[contingency] || {
+                description: 'Unknown contingency type',
+                remedy: 'Consult with VSO for proper contingency analysis',
+                legalBasis: 'VA statutes and regulations',
+                forms: ['Consult VSO']
+            };
+        }
+
+        function getPriorityActions(conditions) {
+            const actions = [];
+            if (conditions.some(c => c.contingency === '1')) actions.push('Address service connection denials');
+            if (conditions.some(c => c.contingency === '3')) actions.push('Pursue rating increases');
+            if (conditions.some(c => c.contingency === '4')) actions.push('Correct effective dates');
+            return actions.join(', ') || 'Develop evidence for claims';
+        }
+
+        function generatePDF() {
+            alert('PDF generation would be implemented with a library like jsPDF. This would create a downloadable copy of your analysis report.');
+            // In production, this would use jsPDF to generate a PDF document
+        }
+
+        // Initialize with one condition
+        document.addEventListener('DOMContentLoaded', addCondition);
+    </script>
+</body>
+</html>
